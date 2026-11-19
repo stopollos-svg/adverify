@@ -293,6 +293,20 @@ async function createServer() {
     res.status(200).send(activeAppAdsLines.join('\n') + '\n');
   });
 
+  // Serve Google Site Verification file permanently at root
+  app.get('/google94cdc1e9ee661eed.html', (_req: Request, res: Response) => {
+    const attachmentPath = path.resolve(
+      __dirname,
+      'public/assets/aistudio/google94cdc1e9ee661eed_ee340d0c.html'
+    );
+    const content = fs.existsSync(attachmentPath)
+      ? fs.readFileSync(attachmentPath, 'utf-8')
+      : 'google-site-verification: google94cdc1e9ee661eed.html\n';
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=300');
+    res.status(200).send(content);
+  });
+
   // Retrieve or update active /app-ads.txt configuration
   app.get('/api/app-ads-config', (req: Request, res: Response) => {
     const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
